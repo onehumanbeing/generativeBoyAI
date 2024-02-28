@@ -60,15 +60,6 @@ class App extends React.Component {
         }, 6000); 
       }
     });
-    // ($('.slider') as any).slick({
-    //   centerMode: true,
-    //   centerPadding: '60px',
-    //   slidesToShow: 3,
-    //   slidesToScroll: 1,
-    //   prevArrow: '<button type="button" class="slick-prev"> ← </button>',
-    //   nextArrow: '<button type="button" class="slick-next"> →</button>',
-    //   appendArrows: $('.slick-arrow-container'),
-    // });
   }
 
   render() {
@@ -84,10 +75,10 @@ class App extends React.Component {
       <div className="wrapper">
          <nav className="p-4">
          <nav className="p-4">
-          <div className="flex justify-end items-center">
-            <ConnectKitButton />
-          </div>
-        </nav>
+        <div className="flex justify-end items-center">
+          <ConnectKitButton />
+        </div>
+      </nav>
         </nav>
         <div className="m-grid"></div>
         <div className="m-logo" id="sectionZero">

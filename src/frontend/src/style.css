@@ -89,7 +89,7 @@ button{
 #gameboy{
   position: absolute;
     transform: scale(2) translateY(100vh);
-    width: 600px;
+    width: 700px;
 }
 .game-body{
   text-align: center;
