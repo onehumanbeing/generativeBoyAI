@@ -2,6 +2,7 @@ import React from 'react';
 import Slider from "react-slick";
 import $ from 'jquery';
 import { TweenMax, Power2, Power3, TimelineMax } from 'gsap';
+import { ConnectKitButton } from 'connectkit';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './style.css';
@@ -81,6 +82,13 @@ class App extends React.Component {
     };
     return (
       <div className="wrapper">
+         <nav className="p-4">
+         <nav className="p-4">
+          <div className="flex justify-end items-center">
+            <ConnectKitButton />
+          </div>
+        </nav>
+        </nav>
         <div className="m-grid"></div>
         <div className="m-logo" id="sectionZero">
           <div className="m-logo__wrap" id="sectionOne">
