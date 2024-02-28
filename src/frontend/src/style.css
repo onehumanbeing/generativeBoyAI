@@ -1,0 +1,393 @@
+@import 'https://fonts.googleapis.com/css?family=Monoton';
+@import 'https://fonts.googleapis.com/css?family=Press+Start+2P';
+@import 'https://fonts.googleapis.com/css?family=Mr+Dafoe';
+@import 'https://fonts.googleapis.com/css?family=Changa+One';
+
+
+body {
+  background: #000;
+  background-image: linear-gradient(to bottom, #6A0275 10%, #040C4A 60%);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+button{
+  cursor: pointer;
+}
+.slick-list{
+  overflow: visible !important;
+}
+
+.slick-slide{
+  opacity: 0;
+}
+
+.slick-active{
+  opacity: 0.4;
+  transform: scale(0.8);
+}
+
+.slick-current{
+  opacity: 1;
+    transform: scale(1);
+}
+.slider{
+  width: 800px;
+}
+.slider img{
+  width: 200px;
+  padding: 30px;
+}
+.m-logo {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 501;
+}
+
+.m-logo__wrap {
+  transform: scale(0);
+  text-align: center;
+}
+
+.m-logo__wrap.press-enter{
+  animation: flash 0.5s linear alternate;
+}
+
+.m-logo__wrap.press-enter  h3{
+  animation: none !important;
+}
+
+#sectionZero.game-init{
+  animation: bounce 1s ease-out;
+  transform: scale(0);
+}
+
+#sectionTwo{
+  opacity: 0;
+  transition: 1.4s all;
+}
+
+
+#gameContent{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 0;
+  /* background-image: url('screen.png'); */
+  background-repeat: repeat;
+  background-size: cover;
+}
+
+#gameboy{
+  position: absolute;
+    transform: scale(2) translateY(100vh);
+    width: 600px;
+}
+.game-body{
+  text-align: center;
+  font-family: "Press start 2p", sans-serif;
+}
+.game-nav{
+  display: flex;
+    justify-content: end;
+    padding: 5%;
+}
+.game-nav button{
+  background: transparent;
+  border: 3px solid black;
+  width: 40px;
+  height: 40px;
+  color: black;
+  font-weight: bold;
+}
+
+.slick-arrow-container {
+  margin-top: 3em;
+  margin-bottom: 5em;
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.slick-arrow-container button {
+  background: #48598b;
+  border: 3px solid #161021;
+  color: white;
+  font-size: 30px;
+  width: 60px;
+  height: 60px;
+}
+
+#sectionTwo.select-game{
+  opacity: 1;
+}
+
+.selected-game h4, .selected-game .slick-arrow-container, .selected-game .slick-active {
+  animation: blink-and-hide 0.5s linear;
+  opacity: 0;
+}
+.selected-game .slick-current{
+  animation: insert-game-card 6s linear;
+  opacity: 1;
+  margin-top: -50px; 
+}
+
+.selected-game #gameboy{
+  animation: insert-game-boy 6s linear;
+  transform: scale(10) translateY(0vh);
+}
+
+.selected-game #gameContent{
+  animation: insert-game-screen 6s linear;
+  z-index: 100;
+  opacity: 1;
+}
+
+.quit-game .slick-current{
+  animation: quit-game-card 6s linear;
+  opacity: 1;
+  margin-top: 0px; 
+}
+.quit-game #gameboy{
+  animation: quit-game-boy 6s linear;
+  transform: scale(2) translateY(100vh);;
+}
+.quit-game #gameContent{
+  animation: quit-game-screen 6s linear;
+  z-index: -2;
+  opacity: 0;
+}
+
+.m-logo h1 {
+  font-family: "Press start 2p", sans-serif;
+  font-size: 62px;
+  letter-spacing: -4px;
+  font-weight: 400;
+  margin: 0 0 0.25em;
+  line-height: 1.25;
+  background-image: -webkit-linear-gradient(top, #3fa8c6 0%, #3fa8c6 0%, #ff9ab2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.m-logo h3 {
+  font-family: "Press start 2p", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 8em;
+  line-height: 1.25;
+  background-image: -webkit-linear-gradient(top, #e2f9ff 0%, #969fa1 0%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  animation: blink 1s linear infinite;
+}
+.m-logo h4 {
+  font-family: "Press start 2p", sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 8em;
+  line-height: 1.25;
+  background-image: -webkit-linear-gradient(top, #e2f9ff 0%, #969fa1 0%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.m-logo .subtitle {
+  color: #ec008c;
+  font-size: 50px;
+  margin: 0;
+  font-family: "Mr Dafoe", serif;
+  text-shadow: 0px 1x 0px #530031;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  min-height: 400px;
+  overflow: hidden;
+  filter: blur(1px);
+}
+.wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: linear-gradient(transparent 70%, rgba(0, 0, 0, 0.5) 30%);
+  background-size: 3px 3px;
+  z-index: 601;
+  pointer-events: none;
+}
+
+.m-grid {
+  position: absolute;
+  top: 50%;
+  margin-top: -75vh;
+  left: 50%;
+  margin-left: -100vw;
+  width: 200vw;
+  height: 150vh;
+  transform: scaleY(0);
+  background-image: linear-gradient(0deg, transparent 24%, rgba(236, 0, 140, 0.5) 25%, rgba(236, 0, 140, 0.9) 26%, transparent 27%, transparent 74%, rgba(236, 0, 140, 0.5) 75%, rgba(236, 0, 140, 0.9) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(236, 0, 140, 0.75) 25%, rgba(236, 0, 140, 0.25) 26%, transparent 27%, transparent 74%, rgba(236, 0, 140, 0.75) 75%, rgba(236, 0, 140, 0.25) 76%, transparent 77%, transparent);
+  background-size: 50px 50px;
+}
+.m-grid.is-animating {
+  -webkit-animation: fly 1s linear;
+          animation: fly 1s linear;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes fly {
+  0% {
+    transform: perspective(300px) rotateX(80deg) translateY(0%);
+  }
+  100% {
+    transform: perspective(300px) rotateX(80deg) translateY(50px);
+  }
+}
+
+@keyframes fly {
+  0% {
+    transform: perspective(300px) rotateX(80deg) translateY(0%);
+  }
+  100% {
+    transform: perspective(300px) rotateX(80deg) translateY(50px);
+  }
+}
+
+
+
+@keyframes bounce {
+  0% {
+      transform: scale(1); /* Start at original size */
+  }
+  70% {
+      transform: scale(1.2); /* Scale up to 120% of original size */
+  }
+  100% {
+      transform: scale(0); /* Scale down to 0 */
+  }
+}
+
+@keyframes flash {
+  0% { opacity: 1; }
+  20% { opacity: 0; }
+  40% { opacity: 1; }
+  60% { opacity: 0; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes blink-and-hide {
+  0% { opacity: 1; }
+  20% { opacity: 0; }
+  40% { opacity: 1; }
+  60% { opacity: 0; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+
+@keyframes insert-game-card  {
+  0% {     margin-top: 0vh; }
+  20% {     margin-top: 0vh; }
+  40% {     margin-top: -30vh; }
+  42% {   margin-top: -30vh;  }
+  45% {        margin-top: -50px;  }
+  50% {        margin-top: -50px;  }
+}
+@keyframes insert-game-boy  {
+  0% {     
+    transform: scale(2) translateY(100vh);
+  }
+  20% {     
+    transform: scale(2) translateY(100vh);
+  }
+  40% {
+    transform: scale(0.5) translateY(0vh);
+  }
+  50% {
+    transform: scale(0.5) translateY(0vh);
+  }
+  55%{
+    transform: scale(10);
+  }
+ 
+}
+@keyframes insert-game-screen  {
+  0% {     
+   opacity: 0;
+  }
+  55% {     
+   opacity: 0;
+  }
+  60%{
+    opacity: 1;
+  }
+ 
+}
+
+
+@keyframes quit-game-card  {
+
+  0%{
+    margin-top: -50px; 
+  }
+  40%{
+    margin-top: -50px; 
+  }
+  60%{
+    margin-top: -30vh; 
+  }
+  70%{
+    margin-top: -30vh; 
+  }
+  80%{
+    margin-top: 0vh;
+  }
+}
+@keyframes quit-game-boy  {
+  0% {     
+    transform: scale(10) translateY(0vh);
+  }
+  20% {     
+    transform: scale(10) translateY(0vh);
+  }
+  40% {     
+    transform: scale(0.5) translateY(0vh);
+  }
+  60% {     
+    transform: scale(0.5) translateY(0vh);
+  }
+  65% {     
+    transform: scale(0.5) translateY(100vh);
+  }
+}
+@keyframes quit-game-screen  {
+  0% {     
+   opacity: 1;
+   z-index: 100;
+  }
+  20% {     
+   opacity: 0;
+   z-index: -1;
+  }
+  
+}
