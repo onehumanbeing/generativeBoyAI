@@ -93,18 +93,23 @@ class App extends React.Component {
           <Slider {...settings} className='slider'>
             <div>
               <img src="card1.png"/>
+              <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
             </div>
             <div>
               <img src="card2.png"/>
+              <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
             </div>
             <div>
               <img src="card3.png"/>
+              <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
             </div>
             <div>
               <img src="card4.png"/>
+              <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
             </div>
             <div>
               <img src="card5.png"/>
+              <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
             </div>
           </Slider>
           <div className="slick-arrow-container"></div>
@@ -114,8 +119,7 @@ class App extends React.Component {
               <button id="closeBtn">✕</button>
             </div>
             <div className="game-body">
-              <h2>Title</h2>
-              <p> Description</p>
+              <h2>Game1</h2>
             </div>
           </div>
         </div>

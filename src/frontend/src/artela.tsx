@@ -16,41 +16,4 @@ export async function getBalance(address: string) {
     } catch (error) {
         console.error(`Failed to fetch balance for address ${address}: ${error}`);
     }
-}
-
-export async function getCounter() {
-    try {
-        const counter = await contract.methods.getCounter(aspectId).call();
-        const counterAsInt = parseInt(counter);
-        return counterAsInt;
-    } catch (error) {
-        console.error(`Failed to fetch counter for aspectId ${aspectId}: ${error}`);
-    }
-}
-
-export async function getWeights() {
-    try {
-        const weights = await contract.methods.getWeights(aspectId).call();
-        return weights;
-    } catch (error) {
-        console.error(`Failed to fetch weights for aspectId ${aspectId}: ${error}`);
-    }
-}
-
-export async function setWeights(signer: any, weights: string) {
-    console.log(weights);
-    const data = contract.methods.setWeights("upload", weights).encodeABI();
-    const tx = {
-        from: signer.address, 
-        to: contractAddress, 
-        data: data, 
-    };
-    try {
-        const receipt = await signer.sendTransaction(tx);
-        console.log(receipt);
-        return receipt;
-    } catch (error) {
-        console.error(`Failed to send transaction: ${error}`);
-    }
-}
-    
+} 

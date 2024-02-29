@@ -6,4 +6,4 @@ pymysql==1.1.0
 web3
 eth_account 
 bip44
-# vercel_kv==0.1.5
+vercel_kv==0.1.5
