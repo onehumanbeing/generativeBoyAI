@@ -1,0 +1,1 @@
+export $(echo $(cat .env | sed 's/#.*//g'| xargs) | envsubst) && npx hardhat deploy --network polygon
