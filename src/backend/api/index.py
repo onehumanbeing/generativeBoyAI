@@ -1,13 +1,15 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 import json
+from vercel_kv import KV, Opts
 import os
 
 API_ENDPOINT = "https://api.openai.com/v1/chat/completions"
 API_KEY = os.getenv("OPENAI", 'your_password')
 account = os.getenv("GASTANK_ACCOUNT", 'your_password')
 private_key = os.getenv("GASTANK_PK", 'your_password')
+CACHE = KV()
 
 headers = {
     'Authorization': f'Bearer {API_KEY}',
@@ -29,34 +31,36 @@ def ask_gpt3(messages):
         print(f"Error {response.status_code}: {response_json['error']['message']}")
         return None
 
-# if __name__ == "__main__":
-#     messages = PROMPTS
-#     while True:
-#         user_input = input("You: ")
-#         if user_input.lower() in ['quit', 'exit']:
-#             break
-#         messages.append({
-#             "role": "user",
-#             "content": user_input
-#         })
-
-#         response = ask_gpt3(messages)
-#         if response.startswith("@pix2pix"):
-#             print(response)
-#         else:
-#             print(f"GPT-3.5: {response}")
-#             messages.append({
-#                 "role": "assistant",
-#                 "content": response
-#             })
-
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
-def home():
-    return 'Hello, World!'
+@app.route('/permit', methods=['POST'])
+def permit():
+    data = request.json() 
 
-@app.route('/about')
+@app.route('/agent', methods=['POST'])
+def agent():
+    data = request.json()
+    messages = data['messages']
+    bountry = int(data['bountry'])
+    prompt = CACHE.get(key="prompt_bountry_%d" % bountry)
+    if prompt is not None:
+        messages = prompt + messages
+    response = ask_gpt3(messages)
+    messages.append({
+        "role": "assistant",
+        "content": response
+    })
+    return jsonify({'response': response, 'messages': messages}), 200
+
+@app.route('/prompt', methods=['POST'])
+def prompt():
+    data = request.json()
+    bountry = int(data['bountry'])
+    prompt = data['prompt']
+    CACHE.put(key="prompt_bountry_%d" % bountry, value=prompt)
+    return jsonify({'response': 'success'}), 200
+
+@app.route('/')
 def about():
-    return 'About'
+    return 'Gameboy'
