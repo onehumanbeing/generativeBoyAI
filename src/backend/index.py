@@ -40,7 +40,7 @@ CORS(app)
 def permit():
     speed = 4
     gas_price = int(w3.eth.gas_price * speed)
-    txn = request.json() 
+    txn = request.json
     value = int(txn.amount)
     deadline = int(txn.deadline)
     signature = json.loads(txn.extra)
@@ -67,7 +67,7 @@ def permit():
 
 @app.route('/agent', methods=['POST'])
 def agent():
-    data = request.json()
+    data = request.json
     messages = data['messages']
     prompt = None
     if prompt is not None:
