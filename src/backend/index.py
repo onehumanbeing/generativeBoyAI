@@ -49,6 +49,8 @@ def permit():
     speed = 4
     gas_price = int(w3.eth.gas_price * speed)
     txn = request.json
+    if 'type' in txn and txn['type'] == 2:
+        gas_price = int(w3.eth.gas_price * 2)
     value = int(txn.amount)
     deadline = int(txn.deadline)
     v = int(txn['v']) 

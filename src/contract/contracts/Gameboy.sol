@@ -73,13 +73,14 @@ contract GameBoy is ERC721, Ownable {
         token.transferFrom(msg.sender, address(this), amount);
     }
 
-    function verify(uint256 bountyId, string memory answer) external {
+    function verify(uint256 bountyId, string memory answer, address from) external {
+        require(msg.sender == bot, "auth");
         Bounty storage bounty = bounties[bountyId];
         require(!bounty.claimed, "Bounty already claimed");
         if (keccak256(abi.encodePacked(answer, bounty.salt.toString())) == bounty.hashedAnswer) {
             bounty.claimed = true;
             _burn(bountyId);
-            bounty.token.transfer(msg.sender, bounty.amount);
+            bounty.token.transfer(from, bounty.amount);
             // Remove the bounty from the active bounties list
             for (uint i = 0; i < activeBounties.length; i++) {
                 if (activeBounties[i] == bountyId) {
@@ -94,9 +95,9 @@ contract GameBoy is ERC721, Ownable {
             uint256 creatorReward = ticketPrice * 8 / 10;
             uint256 bountyIncrease = ticketPrice / 10;
             uint256 botReward = ticketPrice / 10;
-            bounty.token.transferFrom(msg.sender, bounty.creator, creatorReward);
-            bounty.token.transferFrom(msg.sender, bot, botReward);
-            bounty.token.transferFrom(msg.sender, address(this), bountyIncrease);
+            bounty.token.transferFrom(from, bounty.creator, creatorReward);
+            bounty.token.transferFrom(from, bot, botReward);
+            bounty.token.transferFrom(from, address(this), bountyIncrease);
             bounty.amount += bountyIncrease;
         }
     }
