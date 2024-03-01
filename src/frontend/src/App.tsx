@@ -74,30 +74,6 @@ const App = () => {
   }, []);
 
 
-  // function for Harpie service
-  const validateAddress = async (address: string) => {
-    try {
-      const response = await fetch("https://api.harpie.io/v2/validateAddress", {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          apiKey: "541e2fce-c0a1-495e-8989-ac4dc224d5fd",
-          address: address
-        })
-      });
-      const data = await response.json();
-      setIsMaliciousAddress(data.isMaliciousAddress);
-      setValidationSummary(data.isMaliciousAddress ? data.summary : 'This address is safe.');
-      setAddressTags(data.tags); 
-    } catch (error) {
-      console.error('Error validating address:', error);
-      setIsMaliciousAddress(null);
-      setValidationSummary('Error validating address.');
-    }
-  };
 
 
   // const response = await fetch("https://api.harpie.io/v2/validateAddress", {
@@ -141,11 +117,11 @@ const App = () => {
          <nav className="p-4">
         <div className="flex justify-end items-center">
           <ConnectKitButton />
-          <AddressValidation
+          {/* <AddressValidation
             isMalicious={isMaliciousAddress ?? false}
             summary={validationSummary}
             tags={addressTags ?? undefined} // Pass the tags as a prop
-          />
+          /> */}
         </div>
 
       </nav>
