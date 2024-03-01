@@ -1,0 +1,56 @@
+
+        .answer{
+          /* width: 100%; */
+          /* position: relative; */
+          /* height: 200vh; */
+        }
+    
+        .ipt{
+          display:flex;
+          align-items: center;
+          position: absolute;
+          /* bottom: 60px; */
+          margin: 0 15px;
+          padding-right: 15px;
+          border-radius: 15px;
+          width: calc(100% - 30px);
+          height: 50px;
+          border: 1px solid #e7eaec;
+        }
+        .ipt textarea {
+          resize: none;
+          overflow-y: auto;
+          border: none;
+          box-shadow: none;
+        }
+        .ipt textarea:focus{
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        #chatWindow {
+          max-height: calc(70vh - 120px);
+          height:auto;
+          overflow-y: auto;
+        }
+    
+        .message-bubble {
+            padding: 10px;
+            margin: 5px;
+            display: flex;
+            align-items: flex-start;
+            border-bottom: 1px dashed #e7eaec;
+        }
+    
+    
+        .message-bubble p {
+            font-size: 18px;
+            margin-left:15px;
+        }
+    
+        .chat-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 3px;
+            
+        }
