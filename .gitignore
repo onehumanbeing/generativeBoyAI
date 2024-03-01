@@ -1,8 +1,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,node,react,virtualenv,visualstudiocode,solidity
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,node,react,virtualenv,visualstudiocode,solidity
-
+env.sh
 src/build/*
+src/aspect/*
+privateKey.txt
 src/contracts/openzeppelin/*
+src/asconfig.json
 ### macOS ###
 # General
 .DS_Store
