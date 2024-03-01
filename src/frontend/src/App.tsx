@@ -6,6 +6,7 @@ import { ConnectKitButton } from 'connectkit';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './style.css';
+import ChatComponent from './component/chatbot';
 
 class App extends React.Component {
   componentDidMount() {
@@ -118,11 +119,15 @@ class App extends React.Component {
             <div className="game-nav">
               <button id="closeBtn">✕</button>
             </div>
-            <div className="game-body">
-              <h2>Game1</h2>
+  
+            <div>
+              {/* <h2>Game </h2> */}
+              <ChatComponent/>
             </div>
+  
           </div>
-        </div>
+  
+          </div>
       </div>
     );
   }
