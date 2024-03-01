@@ -11,6 +11,43 @@ export async function getBalance(address: string) {
     return balance
 }
 
+// send necessary data to backend
+const handleSubmit = async (transactionData: { token: string; amount: string; ticketAmount: number; ipfsHash: string; deadline: string; from: string; v: number; r: string; s: string; }) => {
+    try {
+        const response = await fetch('/permit', { // Make sure the endpoint matches your Flask route
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount: transactionData.amount,
+                deadline: transactionData.deadline,
+                v: transactionData.v,
+                r: transactionData.r,
+                s: transactionData.s,
+                sender: transactionData.from,
+                daiAddress: DAIAddress
+            }),
+        });
+
+        console.log("$$$$$", JSON.stringify({
+            amount: transactionData.amount,
+            deadline: transactionData.deadline,
+            v: transactionData.v,
+            r: transactionData.r,
+            s: transactionData.s,
+            sender: transactionData.from,
+            daiAddress: DAIAddress
+          }));
+
+        console.log("response", await response.json());
+    } catch (error) {
+        console.error('Error fetching data: ', error);
+    }
+  };
+
+
+
 export async function signPermit(signer: any, userAddress: string, value: string, deadline: string) {
     console.log(deadline)
     const provider = new ethers.providers.InfuraProvider('sepolia', '7437313d862044f09dda3a0c84d05276');  
@@ -50,7 +87,16 @@ export async function signPermit(signer: any, userAddress: string, value: string
         from: userAddress,
         v: sig.v,
         r: sig.r,
-        s: sig.s
+        s: sig.s,
+        daiAddress: DAIAddress,
     }
+    handleSubmit(transactionData);
     console.log('Bountry:', transactionData);
 }
+
+// amount: amount
+//     deadline: deadline
+//     v
+//     r
+//     s
+//     sender (from)
