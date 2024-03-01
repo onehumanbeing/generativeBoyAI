@@ -38,15 +38,22 @@ CORS(app)
 
 @app.route('/permit', methods=['POST'])
 def permit():
+    """
+    amount: amount
+    deadline: deadline
+    v
+    r
+    s
+    sender (from)
+    """
     speed = 4
     gas_price = int(w3.eth.gas_price * speed)
     txn = request.json
     value = int(txn.amount)
     deadline = int(txn.deadline)
-    signature = json.loads(txn.extra)
-    v = int(signature['v']) 
-    r = signature['r']
-    s = signature['s']
+    v = int(txn['v']) 
+    r = txn['r']
+    s = txn['s']
     contract_address = ''
     owner = txn.sender
     spender = account
