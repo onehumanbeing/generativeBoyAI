@@ -4,15 +4,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 
-import { WagmiConfig, createClient } from 'wagmi';
+import { WagmiConfig, chain, createClient } from 'wagmi';
 import { ConnectKitProvider, getDefaultClient } from 'connectkit';
-import { artelaTestNet } from './chain';
 
 const client = createClient(
   getDefaultClient({
     appName: 'GBA',
     infuraId: process.env.REACT_APP_INFURA_ID,
-    chains: [artelaTestNet],
+    chains: [chain.sepolia],
   })
 );
 
