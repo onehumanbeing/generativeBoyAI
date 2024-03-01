@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@artela/web3": "^1.9.22",
     "@emotion/react": "^11.11.3",
@@ -16,6 +17,7 @@
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.17",
+    "bootstrap": "^5.3.3",
     "connectkit": "^0.0.2",
     "ethers": "^5.7.2",
     "gsap": "^3.12.5",
