@@ -4,6 +4,7 @@ import './chatbot.css'; // Assume you've copied the CSS styles into this file
 import ProgressBar from './ProgressBar/progressbar';
 import { ConnectKitButton } from 'connectkit';
 import AddressValidation from './harpie/addressValidation';
+import SubmissionComponent from './submissionResult/submissionResult';
 
 type Message = {
   role: 'user' | 'bot';
@@ -15,16 +16,16 @@ const ChatComponent: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
 //   let progressRoundValue = 0; 
   const [progressRoundValue, setProgressRoundValue] = useState(0);
-  const progressRoundMax = 10; 
+  const progressRoundMax = 6; 
   const [progressValue, setProgressValue] = useState(10);
   const progressMax = 100; 
   const [additionalInput, setAdditionalInput] = useState('');
 
-
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const lotteryAmount = 11.23;
 
 //   const prompt = "During a trip, none of the photos taken for my girlfriend are suitable for posting on Instagram...";
-
-    const prompt = "Please guess a fruit !"
+    const prompt = "In this game, you will try to guess a 'fruit'. Go get the Lottery!!!"
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
@@ -35,6 +36,7 @@ const ChatComponent: React.FC = () => {
     // Clear data when the component mounts
     setMessages([]);
     setProgressRoundValue(0);
+    setIsSubmitted(false);
   }, []);
 
   const handleAdditionalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +46,8 @@ const ChatComponent: React.FC = () => {
   const handleAdditionalInputSubmit = () => {
     console.log(additionalInput);
     setAdditionalInput('');
+    setIsSubmitted(true);
+    
   };
 
 
@@ -65,7 +69,6 @@ const ChatComponent: React.FC = () => {
         return fruits[randomIndex];
       };
       const randomFruit = getRandomFruit();
-
       const script = `You are a AI assistant of the guess-fruit game. The answer of this game is ${randomFruit}. User will chat with you to play this game and guess the fruit name.`;
     const messages: { role: string; content: string }[] = [
         {
@@ -149,53 +152,101 @@ const ChatComponent: React.FC = () => {
   };
 
   return (
-  <div>
+  <div style={{ transform: 'translateY(-60%)' }}>
       {/* <h1 className="text-center m-b-lg">Chat with ChatGPT</h1> */}
       <div className="answer">
 
-      <h2>Prompt: {prompt}</h2>
-      
-      <h2> Lottery Amount: $425.25</h2>
-      <ProgressBar
-          value={progressValue}
-          max={progressMax}
-        //   label=""
-          topLeftText="energy"
-          topRightText={`${progressValue}/${progressMax}`}
-          leftText=" current round / available rounds "
-          rightText={`${progressRoundValue}/${progressRoundMax}`}
-        />
+                    <h2 style={{ fontSize: '24px', fontFamily: 'Arial, sans-serif' }}>{prompt}</h2>
+                    
+                    <h2> Lottery Amount: ${lotteryAmount}</h2>
+                    <ProgressBar
+                        value={progressRoundValue}
+                        max={progressRoundMax}
+                        //   label=""
+                        topLeftText="energy"
+                        topRightText={`${progressRoundValue}/${progressRoundMax}`}
+                        leftText=" current round / available rounds "
+                        rightText={`${progressRoundValue}/${progressRoundMax}`}
+                        />
 
-<div id="chatWindow" className="mb-3" style={{
-  height: '200px', 
-  overflowY: 'scroll', 
-  padding: '10px',
-  borderRadius: '5px',
-  boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                <div id="chatWindow" className="mb-3" style={{
+                height: '200px', 
+                overflowY: 'scroll', 
+                padding: '10px',
+                borderRadius: '5px',
+                boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                }}>
+                {messages.map((message, index) => (
+                    <div key={index} className="row message-bubble">
+                    <img className="chat-icon" src={message.role === 'user' ? './card1.png' : './card2.png'} alt="icon" />
+                    <p className="message-text">{message.content}</p>
+                    </div>
+                ))}
+                </div>
+
+
+                <div className="input-group ipt" style={{ padding: '10px 20px' }}>          
+                    <textarea
+                        id="chatInput"
+                        className="form-control"
+                        rows={1}
+                        value={input}
+                        onChange={handleInputChange}
+                        onKeyPress={handleKeyPress}
+                        style={{ width: '100%',borderRadius: '5px', padding: '5px'}}
+                        placeholder="Ask any questions to solve this puzzle!"
+                    ></textarea>
+                    <button  style={{ padding: '10px 20px' }} id="chatBtn" className="btn btn-primary" type="button" onClick={handleSubmit}> Enter</button>
+                </div>
+
+
+    <div className="additional-input-container" style={{ 
+          position: 'fixed', 
+          bottom: '10px', // Adjust as needed
+          left: '50%',   // Center the container
+          transform: 'translate(-50%, 450%)', // Center the container
+          padding: '10px',
+        //   background: '#fff',
+          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)', // Optional shadow for better visibility
+          borderRadius: '5px' // Rounded corners
+      }}>
+                
+    {!isSubmitted ? (
+
+<div style={{
+    
 }}>
-  {messages.map((message, index) => (
-    <div key={index} className="row message-bubble">
-      <img className="chat-icon" src={message.role === 'user' ? './card1.png' : './card2.png'} alt="icon" />
-      <p className="message-text">{message.content}</p>
-    </div>
-  ))}
+<input
+type="text"
+value={additionalInput}
+onChange={handleAdditionalInputChange}
+placeholder="Enter your Answer"
+style={{ width: '150px' }}
+/>
+
+<button
+className="btn btn-primary"
+type="button"
+onClick={handleAdditionalInputSubmit}
+style={{
+    whiteSpace: 'nowrap' // Ensure button text does not wrap
+}}
+>
+Submit Your Answer!
+</button>
 </div>
 
-
-        <div className="input-group ipt" style={{ padding: '10px 20px' }}>          
-        <textarea
-            id="chatInput"
-            className="form-control"
-            rows={1}
-            value={input}
-            onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-            style={{ borderRadius: '5px' }}
-          ></textarea>
-          <button  style={{ padding: '10px 20px' }} id="chatBtn" className="btn btn-primary" type="button" onClick={handleSubmit}> Enter</button>
+) : (
+<div>
+<SubmissionComponent amount={lotteryAmount} success={true}/>
+</div>
+)}
+   
+        
         </div>
+
       </div>
-      
+{/*       
       <div className="additional-input-container" style={{ 
           position: 'fixed', 
           bottom: '10px', // Adjust as needed
@@ -206,33 +257,28 @@ const ChatComponent: React.FC = () => {
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)', // Optional shadow for better visibility
           borderRadius: '5px' // Rounded corners
       }}>
-        <input
-          type="text"
-          value={additionalInput}
-          onChange={handleAdditionalInputChange}
-          placeholder="Enter additional info here"
-          style={{ 
-            marginRight: '10px',
-            width: '300px', // Adjust width as needed
-            borderRadius: '5px',
-            border: '1px solid #ccc' // Adjust border as needed
-          }}
-        />
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={handleAdditionalInputSubmit}
-          style={{
-            whiteSpace: 'nowrap' // Ensure button text does not wrap
-          }}
-        >
-          Submit Your Answer!
-        </button>
-        <div>
-        
-        </div>
-      </div>
+      </div> */}
        
+
+
+    {/* <div style={{ 
+    position: 'fixed', 
+    bottom: '-100', // Adjust as needed
+    left: '50%',   // Center the container
+    transform: 'translateX(-50%)', // Center the container
+    padding: '10px',
+    background: '#fff',
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)', // Optional shadow for better visibility
+    borderRadius: '5px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '10px'
+  }}>
+
+
+</div> */}
+
 
     </div>
   );

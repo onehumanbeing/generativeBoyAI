@@ -216,6 +216,7 @@ button{
   overflow: hidden;
   filter: blur(1px);
 }
+
 .wrapper::after {
   content: "";
   position: absolute;

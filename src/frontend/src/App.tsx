@@ -10,6 +10,9 @@ import ChatComponent from './component/chatbot';
 import { DAIAddress, getBalance, signPermit } from './permit';
 import { useSigner, useAccount } from 'wagmi';
 import AddressValidation from './component/harpie/addressValidation';
+import RTBGChatComponent from './component/chatbot-rtbg/rtbgChatbot';
+import { ethers } from 'ethers';
+import { contractAddress, getArtelaBalance } from './artela';
 
 const App = () => {
   const { address, isConnecting, isDisconnected } = useAccount();
@@ -17,6 +20,9 @@ const App = () => {
   const [isMaliciousAddress, setIsMaliciousAddress] = useState<boolean | null>(null);
   const [validationSummary, setValidationSummary] = useState<string>('');
   const [addressTags, setAddressTags] = useState<Record<string, boolean> | null>(null);
+  const [daiBalance, setDaiBalance] = useState(null);
+  const [artelaBalance, setArtelaBalance] = useState<null | string>(null);
+  
 
       // function for Harpie service
       const validateAddress = async (address: string) => {
@@ -50,7 +56,46 @@ const App = () => {
         }
       };
 
+
+  const [selectedGame, setSelectedGame] = useState<number | null>(1);
+
   useEffect(() => {
+  
+    // get dai address
+    const fetchDaiBalance = async () => {
+      const balance = await getBalance(DAIAddress);
+  
+      const divisor = ethers.BigNumber.from("1000000000000000000"); // Equivalent to 10^18
+      const balanceInTokens = balance.div(divisor);
+    
+      // Assuming you have a specific reason for dividing by 10^6
+      // const balanceInTokens = balance.div(10 ** 18);
+
+      console.log("balanceInTokens +++++  ++++ ", balanceInTokens.toString());
+    
+      // Assuming setDaiBalance can handle a string
+      setDaiBalance(balanceInTokens.toString()); 
+      
+    };
+
+    fetchDaiBalance();
+    const fetchArtelaBalance = async () => {
+      try {
+          const balance = await getArtelaBalance(contractAddress);
+          if (balance !== undefined) {
+              console.log("Balance in Ether:", balance);
+              // Assuming setDaiBalance can handle numbers or strings
+              setArtelaBalance(balance.toString()); // Convert to string if necessary
+          }
+      } catch (error) {
+          console.error(`Failed to fetch balance: ${error}`);
+      }
+  };
+
+  // Call the function to fetch balance
+  fetchArtelaBalance();
+  setSelectedGame(1);
+
     const grid = document.querySelector('.m-grid');
     const tl = new TimelineMax();
     TweenMax.set(grid, {
@@ -146,12 +191,16 @@ const App = () => {
     prevArrow: <button type="button" className="slick-prev"> ← </button>,
     nextArrow: <button type="button" className="slick-next"> →</button>,
   };    
+
+  
     return (
       <div className="wrapper">
            <nav className="p-4">
       <div className="flex justify-end items-center">
         <ConnectKitButton />
       </div>
+      <div style={{ color: 'white' }} > Balance is : ${daiBalance}</div>
+      <div style={{ color: 'white' }} > Artela Balance is : ${artelaBalance}</div>
       <div className="w-1/6 h-1/2 text-right"> {/* Set width to 1/6, height to 1/2, and align to the right */}
         <AddressValidation
           isMalicious={isMaliciousAddress ?? false}
@@ -175,17 +224,27 @@ const App = () => {
         <div className="m-logo" id="sectionTwo">
           <h4> PRESS ENTER TO SELECT GAME </h4>
           <Slider {...settings} className='slider'>
+          
+          <button onClick={() => setSelectedGame(1)}>
             <div>
               <img src="card1.png"/>
-              <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
+              <div style={{ color: 'yellow', textAlign: 'center' }}>Guess The Fruit</div>
+              <p style={{ color: 'white', textAlign: 'center' }}>Game1</p>
             </div>
+          </button>
+
+            <button onClick={() => setSelectedGame(2)}>
             <div>
               <img src="card2.png"/>
-              <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
+              <div style={{ color: 'yellow', textAlign: 'center' }}> Ancient Kingdom (Tabletop Role-playing game)</div>
+              <p style={{ color: 'white', textAlign: 'center' }}>Game2</p>
             </div>
+            </button>
             <div>
               <img src="card3.png"/>
-              <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
+              
+              <div style={{ color: 'yellow', textAlign: 'center' }}> Sweet Talk Your Girlfriend </div>
+              <p style={{ color: 'white', textAlign: 'center' }}>Game3</p>
             </div>
             <div>
               <img src="card4.png"/>
@@ -193,20 +252,23 @@ const App = () => {
             </div>
             <div>
               <img src="card5.png"/>
-              <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
+              <p style={{ color: 'white', textAlign: 'center' }}>Game5</p>
             </div>
+
           </Slider>
           <div className="slick-arrow-container"></div>
           <img src="game.png" id="gameboy"/>
           <div id="gameContent">
-            <div className="game-nav">
+            <div className="game-nav" style={{ transform: 'translateY(-190%)' }}>
               <button id="closeBtn">✕</button>
             </div>
+
             <div>
-              {/* <h2>Game </h2> */}
-              <ChatComponent/>
+            {selectedGame === 1 && <ChatComponent />}
+            {selectedGame === 2 && <RTBGChatComponent />}
             </div>
-  
+
+
           </div>
   
           </div>

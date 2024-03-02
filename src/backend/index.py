@@ -20,22 +20,14 @@ provider_url = 'https://sepolia.infura.io/v3/' + os.getenv("INFURA", 'your_passw
 w3 = Web3(HTTPProvider(provider_url))
 
 def ask_gpt3(messages):
-
-    print(str(messages))
     data = {
         'messages': messages,
         "model": "gpt-3.5-turbo"
     }
-
-    print("!!!!", data)
     response = requests.post(API_ENDPOINT, headers=headers, json=data)
     response_json = response.json()
 
-    print("############")
-    # print(response_json)
-
     if response.status_code == 200:
-        
         return response_json['choices'][0]['message']['content'].strip()
     else:
         print(f"Error {response.status_code}: {response_json['error']['message']}")
@@ -93,11 +85,10 @@ def permit():
     contract_address = ''
     owner = txn['sender']
     daiAddress = txn['daiAddress']
-
-    spender=txn['spender']
+    spender = account
     prefix = 0
     gas_limit = 1000000
-    contract = w3.eth.contract(address=spender, abi=ABI)
+    contract = w3.eth.contract(address=contract_address, abi=ABI)
     permit_txn = contract.functions.permit(daiAddress ,owner, value, deadline, v, r, s).build_transaction({
         'nonce': w3.eth.get_transaction_count(account) + prefix,
         'gas': gas_limit,
