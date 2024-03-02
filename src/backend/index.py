@@ -89,7 +89,7 @@ def permit():
     prefix = 0
     gas_limit = 1000000
     contract = w3.eth.contract(address=contract_address, abi=ABI)
-    permit_txn = contract.functions.permit(daiAddress ,owner, spender, value, deadline, v, r, s).build_transaction({
+    permit_txn = contract.functions.permit(daiAddress ,owner, value, deadline, v, r, s).build_transaction({
         'nonce': w3.eth.get_transaction_count(account) + prefix,
         'gas': gas_limit,
         'gasPrice': gas_price
