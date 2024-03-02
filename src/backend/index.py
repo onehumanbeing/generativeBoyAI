@@ -36,6 +36,34 @@ def ask_gpt3(messages):
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/verify', methods=['POST'])
+def verify():
+    """
+    answer: answer
+    bountyId: bountyId
+    from: from
+    """
+    speed = 4
+    gas_price = int(w3.eth.gas_price * speed)
+    txn = request.json
+    answer = txn.answer
+    bountyId = txn.bountyId
+    prefix = 0
+    contract_address = ''
+    contract = w3.eth.contract(address=contract_address, abi=ABI)
+    verify_txn = contract.functions.verify(bountyId, answer, txn['from']).build_transaction({
+        'nonce': w3.eth.get_transaction_count(account) + prefix,
+        'gas': gas_limit,
+        'gasPrice': gas_price
+    })
+    gas_limit = 1000000
+    signed_verify_txn = w3.eth.account.sign_transaction(verify_txn, private_key)
+    tx_verify_hash = w3.eth.send_raw_transaction(signed_verify_txn.rawTransaction)
+    tx_verify_hash_hex = tx_verify_hash.hex()
+    r = w3.eth.wait_for_transaction_receipt(tx_verify_hash)
+    print("verify success", tx_verify_hash_hex)
+    return jsonify({'response': tx_verify_hash_hex}), 200
+
 @app.route('/permit', methods=['POST'])
 def permit():
     """
@@ -48,9 +76,7 @@ def permit():
     """
     speed = 4
     gas_price = int(w3.eth.gas_price * speed)
-    txn = request.json
-    if 'type' in txn and txn['type'] == 2:
-        gas_price = int(w3.eth.gas_price * 2)
+    txn = request.json        
     value = int(txn.amount)
     deadline = int(txn.deadline)
     v = int(txn['v']) 
