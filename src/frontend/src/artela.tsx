@@ -8,7 +8,7 @@ var web3 = new Web3('https://betanet-rpc2.artela.network');
 
 export const contract = new web3.eth.Contract(contractABI, contractAddress);
 
-export async function getBalance(address: string) {
+export async function getArtelaBalance(address: string) {
     try {
         const balance = await contract.methods.balanceOf(address).call();
         const balanceInEther = Number(BigInt(balance) / BigInt(1e18));
@@ -16,4 +16,4 @@ export async function getBalance(address: string) {
     } catch (error) {
         console.error(`Failed to fetch balance for address ${address}: ${error}`);
     }
-} 
+}
