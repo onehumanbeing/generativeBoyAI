@@ -59,8 +59,6 @@ const ChatComponent: React.FC = () => {
 
     // let tempInput = "Imagine you are playing the role of my girlfriend during a trip we are on together. Unfortunately, none of the photos I've taken of you are suitable for posting on Instagram,\
     // In this role-play, after providing your response, you will give a rating of my message on a scale from -10 to 10, where -10 means you are very unhappy or angry about it as a person, and 10 means you are very happy or pleased about it as a person. Your response needs to align with your rating, meaning that if the rating shows unhappy then your response need to reflect angry and disappointment. End your response with three asterisks followed by the number representing the rating. For example, 'Your message is considerate, thank you for being so understanding. ***8. here is my message: " + input;
-
-
     const fruits: string[] = ['banana', 'apple', 'pineapple', 'orange', 'grape', 'watermelon', 'kiwi', 'pear', 'peach'];
     const getRandomFruit = (): string => {
         const randomIndex = Math.floor(Math.random() * fruits.length);
@@ -168,14 +166,22 @@ const ChatComponent: React.FC = () => {
           rightText={`${progressRoundValue}/${progressRoundMax}`}
         />
 
-        <div id="chatWindow" className="mb-3">
-          {messages.map((message, index) => (
-            <div key={index} className="row message-bubble">
-              <img className="chat-icon" src={message.role === 'user' ? './card1.png' : './card2.png'} alt="icon" />
-              <p className="message-text">{message.content}</p>
-            </div>
-          ))}
-        </div>
+<div id="chatWindow" className="mb-3" style={{
+  height: '200px', 
+  overflowY: 'scroll', 
+  padding: '10px',
+  borderRadius: '5px',
+  boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+}}>
+  {messages.map((message, index) => (
+    <div key={index} className="row message-bubble">
+      <img className="chat-icon" src={message.role === 'user' ? './card1.png' : './card2.png'} alt="icon" />
+      <p className="message-text">{message.content}</p>
+    </div>
+  ))}
+</div>
+
+
         <div className="input-group ipt" style={{ padding: '10px 20px' }}>          
         <textarea
             id="chatInput"
