@@ -295,8 +295,8 @@ const App = () => {
 
             <div>
             {/* {selectedGame === 1 && <ChatComponent address={address} signer={signer} />} */}
-            {selectedGame === 1 && <RTBGChatComponent />}
-            {selectedGame === 2 && <RTBGChatComponent />}
+            {selectedGame === 1 && <ChatComponent address={address} signer={signer} />}
+            {selectedGame === 2 && <RTBGChatComponent address={address} signer={signer}  />}
             </div>
 
 

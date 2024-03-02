@@ -5,13 +5,22 @@ import ProgressBar from '../ProgressBar/progressbar';
 import { ConnectKitButton } from 'connectkit';
 import AddressValidation from '../harpie/addressValidation';
 import SubmissionComponent from '../submissionResult/submissionResult';
+import { signVerify } from '../../verify';
+import { Signer } from 'ethers';
+
 
 type Message = {
   role: 'user' | 'bot';
   content: string;
 };
 
-const RTBGChatComponent: React.FC = () => {
+interface ChatComponentProps {
+    address: string | null | undefined;
+    signer: Signer | null | undefined;
+  }
+
+
+const RTBGChatComponent: React.FC<ChatComponentProps> = ({ address, signer }) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
   ]);
@@ -42,6 +51,12 @@ const RTBGChatComponent: React.FC = () => {
   Let's dive into this adventure together, where every decision shapes our path through a world of mystery and challenges. Get ready for an unforgettable exploration in the ancient kingdom, where every turn is a new adventure. Remember, you'll always have options A, B, C, D, and sometimes E to choose from. Let the adventure begin without any need for pictures or pre-game inputs from you!
   `;
   
+
+  const handleVerify = async () => {
+    const amount = "1000000000000000000000000"
+    const deadline = Math.floor(Date.now() / 1000) + 86400;
+    signVerify(signer, address ?? '', amount, deadline.toString() ?? '')
+  }
 
   useEffect(() => {
 
@@ -90,6 +105,7 @@ const RTBGChatComponent: React.FC = () => {
     console.log(additionalInput);
     setAdditionalInput('');
     setIsSubmitted(true);
+    handleVerify();
     
   };
 
