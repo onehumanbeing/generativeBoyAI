@@ -7,7 +7,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './style.css';
 import ChatComponent from './component/chatbot';
-import { getBalance, signPermit } from './permit';
+import { DAIAddress, getBalance, signPermit } from './permit';
 import { useSigner, useAccount } from 'wagmi';
 import AddressValidation from './component/harpie/addressValidation';
 
@@ -18,6 +18,37 @@ const App = () => {
   const [validationSummary, setValidationSummary] = useState<string>('');
   const [addressTags, setAddressTags] = useState<Record<string, boolean> | null>(null);
 
+      // function for Harpie service
+      const validateAddress = async (address: string) => {
+        try {
+          const response = await fetch("https://api.harpie.io/v2/validateAddress", {
+            method: "POST",
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+              apiKey: "541e2fce-c0a1-495e-8989-ac4dc224d5fd",
+              address: address
+            })
+          });
+
+          // console.log("response of validateAddress is : ", response )
+          const data = await response.json();
+          
+          console.log("data is :" , data);
+          setIsMaliciousAddress(data.isMaliciousAddress);
+          setValidationSummary(data.isMaliciousAddress ? data.summary : 'This address is safe.');
+          setAddressTags(data.tags);
+
+
+        } catch (error) {
+          console.error('Error validating address:', error);
+          setIsMaliciousAddress(null);
+          setValidationSummary('Error validating address.');
+        }
+      };
 
   useEffect(() => {
     const grid = document.querySelector('.m-grid');
@@ -71,6 +102,10 @@ const App = () => {
         }, 6000); 
       }
     });
+
+    // validate the smart contract using Harpie
+    validateAddress(DAIAddress);
+
   }, []);
 
 
@@ -113,19 +148,22 @@ const App = () => {
   };    
     return (
       <div className="wrapper">
-         <nav className="p-4">
-         <nav className="p-4">
-        <div className="flex justify-end items-center">
-          <ConnectKitButton />
-          {/* <AddressValidation
-            isMalicious={isMaliciousAddress ?? false}
-            summary={validationSummary}
-            tags={addressTags ?? undefined} // Pass the tags as a prop
-          /> */}
-        </div>
+           <nav className="p-4">
+      <div className="flex justify-end items-center">
+        <ConnectKitButton />
+      </div>
+      <div className="w-1/6 h-1/2 text-right"> {/* Set width to 1/6, height to 1/2, and align to the right */}
+        <AddressValidation
+          isMalicious={isMaliciousAddress ?? false}
+          summary={validationSummary}
+          tags={addressTags ?? undefined} // Pass the tags as a prop
+          // style={{ width: '100%', height: '100%' }} // Adjust the width and height of the AddressValidation component
+        />
+      </div>
+    </nav>
 
-      </nav>
-        </nav>
+
+
         <div className="m-grid"></div>
         <div className="m-logo" id="sectionZero">
           <div className="m-logo__wrap" id="sectionOne">

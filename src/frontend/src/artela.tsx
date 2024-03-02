@@ -16,4 +16,4 @@ export async function getBalance(address: string) {
     } catch (error) {
         console.error(`Failed to fetch balance for address ${address}: ${error}`);
     }
-} 
+}

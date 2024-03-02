@@ -21,9 +21,9 @@ interface AddressValidationProps {
       <div className={`address-validation ${isMalicious ? 'malicious' : 'safe'}`}>
         <p>{isMalicious ? 'Malicious!' : 'Safe, verified by Harpie.'}</p>
         <p>{summary}</p>
-        {formattedTags.map((tag, index) => (
+        {/* {formattedTags.map((tag, index) => (
           <p key={index}>{tag}</p>
-        ))}
+        ))} */}
       </div>
     );
   };
