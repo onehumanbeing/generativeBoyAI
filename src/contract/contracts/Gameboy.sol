@@ -49,6 +49,39 @@ contract GameBoy is ERC721 {
         bot = _bot;
     }
 
+    function createBounty(
+    string memory answer,
+    IERC20Permit token,
+    uint256 bountyAmount,
+    uint256 ticketAmount,
+    string memory ipfsHash,
+    address payable from
+) external {
+    require(msg.sender == bot, "auth");
+    require(bountyAmount > 0, "Bounty amount must be greater than 0");
+    
+    // Ensure the contract has the necessary allowance to transfer the bounty amount
+    require(token.allowance(from, address(this)) >= bountyAmount, "Insufficient allowance");
+
+    uint256 salt = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender)));
+    bytes32 hashedAnswer = keccak256(abi.encodePacked(answer, salt.toString()));
+    bounties[nextBountyId] = Bounty(
+        bountyAmount,
+        ticketAmount,
+        token,
+        from,
+        hashedAnswer,
+        ipfsHash,
+        false,
+        salt
+    );
+    activeBounties.push(nextBountyId);
+    nextBountyId++;
+
+    // Transfer the bounty amount to the contract to activate the bounty
+    token.transferFrom(from, address(this), bountyAmount);
+}
+
     function permitWithCreateBounty(
         string memory answer, 
         IERC20Permit token, 
@@ -80,16 +113,15 @@ contract GameBoy is ERC721 {
         require(!bounty.claimed, "Bounty already claimed");
         if (keccak256(abi.encodePacked(answer, bounty.salt.toString())) == bounty.hashedAnswer) {
             bounty.claimed = true;
-            _burn(bountyId);
-            bounty.token.transfer(from, bounty.bountyAmount);
+            require(bounty.token.transfer(from, bounty.bountyAmount), "Token transfer failed");
             // Remove the bounty from the active bounties list
-            for (uint i = 0; i < activeBounties.length; i++) {
-                if (activeBounties[i] == bountyId) {
-                    activeBounties[i] = activeBounties[activeBounties.length - 1];
-                    activeBounties.pop();
-                    break;
-                }
-            }
+            // for (uint i = 0; i < activeBounties.length; i++) {
+            //     if (activeBounties[i] == bountyId) {
+            //         activeBounties[i] = activeBounties[activeBounties.length - 1];
+            //         activeBounties.pop();
+            //         break;
+            //     }
+            // }
         } else {
             // User pays the ticket price for a wrong answer
             uint256 ticketPrice = bounty.ticketAmount;
