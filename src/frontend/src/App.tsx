@@ -13,6 +13,8 @@ import AddressValidation from './component/harpie/addressValidation';
 import RTBGChatComponent from './component/chatbot-rtbg/rtbgChatbot';
 import { ethers } from 'ethers';
 import { contractAddress, getArtelaBalance } from './artela';
+import { BrowserRouter as Router, Route,Routes, Link } from 'react-router-dom';
+import CreateGameComponent from './component/CreateGameComponent/createGameComponent';
 
 const App = () => {
   const { address, isConnecting, isDisconnected } = useAccount();
@@ -22,7 +24,7 @@ const App = () => {
   const [addressTags, setAddressTags] = useState<Record<string, boolean> | null>(null);
   const [daiBalance, setDaiBalance] = useState(null);
   const [artelaBalance, setArtelaBalance] = useState<null | string>(null);
-  
+  const [isCreateGameVisible, setIsCreateGameVisible] = useState(false);
 
       // function for Harpie service
       const validateAddress = async (address: string) => {
@@ -200,7 +202,7 @@ const App = () => {
         <ConnectKitButton />
       </div>
       <div style={{ color: 'white' }} > Balance is : ${daiBalance}</div>
-      <div style={{ color: 'white' }} > Artela Balance is : ${artelaBalance}</div>
+      {/* <div style={{ color: 'white' }} > Artela Balance is : ${artelaBalance}</div> */}
       <div className="w-1/6 h-1/2 text-right"> {/* Set width to 1/6, height to 1/2, and align to the right */}
         <AddressValidation
           isMalicious={isMaliciousAddress ?? false}
@@ -225,7 +227,7 @@ const App = () => {
           <h4> PRESS ENTER TO SELECT GAME </h4>
           <Slider {...settings} className='slider'>
           
-          <button onClick={() => setSelectedGame(1)}>
+          <button data-game-id="1" onClick={() => setSelectedGame(1)}>
             <div>
               <img src="card1.png"/>
               <div style={{ color: 'yellow', textAlign: 'center' }}>Guess The Fruit</div>
@@ -233,7 +235,7 @@ const App = () => {
             </div>
           </button>
 
-            <button onClick={() => setSelectedGame(2)}>
+           <button data-game-id="2" onClick={() => setSelectedGame(2)}>
             <div>
               <img src="card2.png"/>
               <div style={{ color: 'yellow', textAlign: 'center' }}> Ancient Kingdom (Tabletop Role-playing game)</div>
@@ -248,23 +250,52 @@ const App = () => {
             </div>
             <div>
               <img src="card4.png"/>
+              <div style={{ color: 'yellow', textAlign: 'center' }}> Minecraft </div>
               <p style={{ color: 'white', textAlign: 'center' }}>Game4</p>
             </div>
             <div>
               <img src="card5.png"/>
+              <div style={{ color: 'yellow', textAlign: 'center' }}> Among Us </div>
               <p style={{ color: 'white', textAlign: 'center' }}>Game5</p>
             </div>
 
           </Slider>
+     
+     
+          <Router>
+      <div>
+      <button
+   style={{
+    color: 'white',
+    fontWeight: 'bold',
+    textTransform: 'lowercase',
+    height: '90px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%', // Adjust width as necessary
+    border: 'none', // Optional: Removes the border
+    background: 'transparent', // Optional: Sets a transparent background
+    cursor: 'pointer' // Optional: Changes the mouse cursor on hover
+  }}
+  onClick={() => setIsCreateGameVisible(!isCreateGameVisible)}
+>
+  Create a New Game
+</button>
+{isCreateGameVisible && <CreateGameComponent />}
+      </div>
+    </Router>
+
           <div className="slick-arrow-container"></div>
           <img src="game.png" id="gameboy"/>
           <div id="gameContent">
-            <div className="game-nav" style={{ transform: 'translateY(-190%)' }}>
+            <div className="game-nav" style={{ transform: 'translateY(-200%)' }}>
               <button id="closeBtn">✕</button>
             </div>
 
             <div>
-            {selectedGame === 1 && <ChatComponent />}
+            {/* {selectedGame === 1 && <ChatComponent address={address} signer={signer} />} */}
+            {selectedGame === 1 && <RTBGChatComponent />}
             {selectedGame === 2 && <RTBGChatComponent />}
             </div>
 
