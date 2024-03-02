@@ -128,7 +128,7 @@ const RTBGChatComponent: React.FC = () => {
 
     try {
 
-      const response = await fetch('/agent', {
+      const response = await fetch('https://gba-api.thefans.life/agent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

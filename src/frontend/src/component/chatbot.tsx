@@ -120,7 +120,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ address, signer })=> {
 
     try {
 
-      const response = await fetch('/agent', {
+      const response = await fetch('https://gba-api.thefans.life/agent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
