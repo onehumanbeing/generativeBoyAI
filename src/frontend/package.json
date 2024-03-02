@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "https://gba-api.thefans.life",
   "dependencies": {
     "@artela/web3": "^1.9.22",
     "@emotion/react": "^11.11.3",
