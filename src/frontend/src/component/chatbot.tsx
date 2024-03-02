@@ -5,13 +5,20 @@ import ProgressBar from './ProgressBar/progressbar';
 import { ConnectKitButton } from 'connectkit';
 import AddressValidation from './harpie/addressValidation';
 import SubmissionComponent from './submissionResult/submissionResult';
+import { signVerify } from '../verify';
+import { Signer } from 'ethers';
 
 type Message = {
   role: 'user' | 'bot';
   content: string;
 };
 
-const ChatComponent: React.FC = () => {
+interface ChatComponentProps {
+    address: string | null | undefined;
+    signer: Signer | null | undefined;
+  }
+
+const ChatComponent: React.FC<ChatComponentProps> = ({ address, signer })=> {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
 //   let progressRoundValue = 0; 
@@ -43,10 +50,17 @@ const ChatComponent: React.FC = () => {
     setAdditionalInput(e.target.value);
   };
 
+  const handleVerify = async () => {
+    const amount = "1000000000000000000000000"
+    const deadline = Math.floor(Date.now() / 1000) + 86400;
+    signVerify(signer, address ?? '', amount, deadline.toString() ?? '')
+  }
+
   const handleAdditionalInputSubmit = () => {
     console.log(additionalInput);
     setAdditionalInput('');
     setIsSubmitted(true);
+    handleVerify();
     
   };
 
@@ -275,8 +289,6 @@ Submit Your Answer!
     alignItems: 'center',
     gap: '10px'
   }}>
-
-
 </div> */}
 
 

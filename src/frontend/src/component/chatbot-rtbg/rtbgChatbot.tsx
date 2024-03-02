@@ -23,8 +23,8 @@ const RTBGChatComponent: React.FC = () => {
   const [additionalInput, setAdditionalInput] = useState('');
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const lotteryAmount = 11.23;
-
+  const lotteryAmount = 50.42;
+ 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
   };
@@ -178,6 +178,7 @@ const RTBGChatComponent: React.FC = () => {
       <div className="answer">
 
         <h2> Welcome Warrior! Are you ready for the next adventure? </h2>
+        <h2> Lottery Amount: ${lotteryAmount}</h2>
       {/* <h2> 2000 years ago, there was a rumor that there was a giant jailed in the eastern castle. No one know its story and it's prohibited to ask anything about this. </h2>
       <h2> You are a warrior who just shipped from the other side of the ocean, are you ready for this adventure? </h2>
     <h2> You landed on the port, standing right infront of the castle, dark and huge. You walked in, no one guaided the entrance. Then you saw a old lady, what do you want to ask? </h2> */}
@@ -202,7 +203,7 @@ const RTBGChatComponent: React.FC = () => {
 }}>
   {messages.map((message, index) => (
     <div key={index} className="row message-bubble">
-      <img className="chat-icon" src={message.role === 'user' ? './card1.png' : './card2.png'} alt="icon" />
+      {/* <img className="chat-icon" src={message.role === 'user' ? './card1.png' : './card2.png'} alt="icon" /> */}
       <p className="message-text">{message.content}</p>
     </div>
   ))}
