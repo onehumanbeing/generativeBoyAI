@@ -85,7 +85,8 @@ def permit():
     contract_address = ''
     owner = txn['sender']
     daiAddress = txn['daiAddress']
-    spender = account
+
+    spender=txn['spender']
     prefix = 0
     gas_limit = 1000000
     contract = w3.eth.contract(address=contract_address, abi=ABI)

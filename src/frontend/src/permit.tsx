@@ -26,7 +26,8 @@ const handleSubmit = async (transactionData: { token: string; amount: string; ti
                 r: transactionData.r,
                 s: transactionData.s,
                 sender: transactionData.from,
-                daiAddress: DAIAddress
+                daiAddress: DAIAddress,
+                spender: spender
             }),
         });
 
@@ -37,7 +38,8 @@ const handleSubmit = async (transactionData: { token: string; amount: string; ti
             r: transactionData.r,
             s: transactionData.s,
             sender: transactionData.from,
-            daiAddress: DAIAddress
+            daiAddress: DAIAddress,
+            spender: spender
           }));
 
         console.log("response", await response.json());
