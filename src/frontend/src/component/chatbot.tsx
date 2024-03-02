@@ -2,6 +2,8 @@
 import React, { useState, useEffect} from 'react';
 import './chatbot.css'; // Assume you've copied the CSS styles into this file
 import ProgressBar from './ProgressBar/progressbar';
+import { ConnectKitButton } from 'connectkit';
+import AddressValidation from './harpie/addressValidation';
 
 type Message = {
   role: 'user' | 'bot';
@@ -14,9 +16,13 @@ const ChatComponent: React.FC = () => {
 //   let progressRoundValue = 0; 
   const [progressRoundValue, setProgressRoundValue] = useState(0);
   const progressRoundMax = 10; 
-
   const [progressValue, setProgressValue] = useState(10);
   const progressMax = 100; 
+  const [additionalInput, setAdditionalInput] = useState('');
+  const [isMaliciousAddress, setIsMaliciousAddress] = useState<boolean | null>(null);
+  const [validationSummary, setValidationSummary] = useState<string>('');
+  const [addressTags, setAddressTags] = useState<Record<string, boolean> | null>(null);
+
 
   const prompt = "During a trip, none of the photos taken for my girlfriend are suitable for posting on Instagram...";
 
@@ -24,11 +30,45 @@ const ChatComponent: React.FC = () => {
     setInput(e.target.value);
   };
 
+    // function for Harpie service
+    const validateAddress = async (address: string) => {
+        try {
+          const response = await fetch("https://api.harpie.io/v2/validateAddress", {
+            method: "POST",
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              apiKey: "541e2fce-c0a1-495e-8989-ac4dc224d5fd",
+              address: address
+            })
+          });
+          const data = await response.json();
+          setIsMaliciousAddress(data.isMaliciousAddress);
+          setValidationSummary(data.isMaliciousAddress ? data.summary : 'This address is safe.');
+          setAddressTags(data.tags); 
+        } catch (error) {
+          console.error('Error validating address:', error);
+          setIsMaliciousAddress(null);
+          setValidationSummary('Error validating address.');
+        }
+      };
+
   useEffect(() => {
     // Clear data when the component mounts
     setMessages([]);
     setProgressRoundValue(0);
   }, []);
+
+  const handleAdditionalInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAdditionalInput(e.target.value);
+  };
+
+  const handleAdditionalInputSubmit = () => {
+    console.log(additionalInput);
+    setAdditionalInput('');
+  };
 
 
   const handleSubmit = async () => {
@@ -96,7 +136,6 @@ const ChatComponent: React.FC = () => {
   return (
   <div>
       {/* <h1 className="text-center m-b-lg">Chat with ChatGPT</h1> */}
-
       <div className="answer">
 
       <h2>Prompt: {prompt}</h2>
@@ -132,20 +171,51 @@ const ChatComponent: React.FC = () => {
           ></textarea>
           <button  style={{ padding: '10px 20px' }} id="chatBtn" className="btn btn-primary" type="button" onClick={handleSubmit}> Enter</button>
         </div>
+      </div>
+      
 
-        <div className="input-group ipt" style={{ padding: '10px 20px' }}>          
-        <textarea
-            id="chatInput"
-            className="form-control"
-            rows={1}
-            value={input}
-            onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-            style={{ borderRadius: '5px' }}
-          ></textarea>
-          <button  style={{ padding: '10px 20px' }} id="chatBtn" className="btn btn-primary" type="button" onClick={handleSubmit}> Enter</button>
+      <div className="additional-input-container" style={{ 
+          position: 'fixed', 
+          bottom: '10px', // Adjust as needed
+          left: '50%',   // Center the container
+          transform: 'translateX(-50%)', // Center the container
+          padding: '10px',
+          background: '#fff',
+          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)', // Optional shadow for better visibility
+          borderRadius: '5px' // Rounded corners
+      }}>
+        <input
+          type="text"
+          value={additionalInput}
+          onChange={handleAdditionalInputChange}
+          placeholder="Enter additional info here"
+          style={{ 
+            marginRight: '10px',
+            width: '300px', // Adjust width as needed
+            borderRadius: '5px',
+            border: '1px solid #ccc' // Adjust border as needed
+          }}
+        />
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={handleAdditionalInputSubmit}
+          style={{
+            whiteSpace: 'nowrap' // Ensure button text does not wrap
+          }}
+        >
+          Submit Your Answer!
+        </button>
+        <div>
+          <AddressValidation
+            isMalicious={isMaliciousAddress ?? false}
+            summary={validationSummary}
+            tags={addressTags ?? undefined} // Pass the tags as a prop
+          />
         </div>
       </div>
+       
+
     </div>
   );
 };

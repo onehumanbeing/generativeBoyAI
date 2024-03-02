@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from "react-slick";
 import $ from 'jquery';
 import { TweenMax, Power2, Power3, TimelineMax } from 'gsap';
@@ -9,10 +9,15 @@ import './style.css';
 import ChatComponent from './component/chatbot';
 import { getBalance, signPermit } from './permit';
 import { useSigner, useAccount } from 'wagmi';
+import AddressValidation from './component/harpie/addressValidation';
 
 const App = () => {
   const { address, isConnecting, isDisconnected } = useAccount();
   const { data: signer } = useSigner();
+  const [isMaliciousAddress, setIsMaliciousAddress] = useState<boolean | null>(null);
+  const [validationSummary, setValidationSummary] = useState<string>('');
+  const [addressTags, setAddressTags] = useState<Record<string, boolean> | null>(null);
+
 
   useEffect(() => {
     const grid = document.querySelector('.m-grid');
@@ -69,6 +74,29 @@ const App = () => {
   }, []);
 
 
+
+
+  // const response = await fetch("https://api.harpie.io/v2/validateAddress", {
+  //   method: "POST",
+  //   headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify({
+  //       apiKey: "541e2fce-c0a1-495e-8989-ac4dc224d5fd",
+  //       address: address
+  //   })
+  // })
+  // const data = await response.json();
+
+  // const headingText = data.isMaliciousAddress ? 'Malicious!' : 'Safe, verified by Harpie.';
+  // const details = data.isMaliciousAddress ? data.summary : 'This address is safe.';
+  // const tags = Object.entries(data.tags).map(([key, value]) => {
+  //   const formattedKey = key.toLowerCase().replace(/_/g, ' ');
+  //   return text(`${formattedKey}: ${value ? 'True' : 'False'}`);
+  // });
+
+
   const handlePermit = async () => {
     const amount = "1000000000000000000000000"
     const deadline = Math.floor(Date.now() / 1000) + 86400;
@@ -89,7 +117,13 @@ const App = () => {
          <nav className="p-4">
         <div className="flex justify-end items-center">
           <ConnectKitButton />
+          {/* <AddressValidation
+            isMalicious={isMaliciousAddress ?? false}
+            summary={validationSummary}
+            tags={addressTags ?? undefined} // Pass the tags as a prop
+          /> */}
         </div>
+
       </nav>
         </nav>
         <div className="m-grid"></div>

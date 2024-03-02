@@ -1,0 +1,14 @@
+.address-validation {
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+  }
+  
+  .address-validation.malicious {
+    background-color: red;
+  }
+  
+  .address-validation.safe {
+    background-color: green;
+  }

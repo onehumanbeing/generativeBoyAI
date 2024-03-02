@@ -76,23 +76,24 @@ def permit():
     """
     speed = 4
     gas_price = int(w3.eth.gas_price * speed)
-    txn = request.json        
-    value = int(txn.amount)
-    deadline = int(txn.deadline)
+    txn = request.json
+    value = int(txn['amount'])
+    deadline = int(txn['deadline'])
     v = int(txn['v']) 
     r = txn['r']
     s = txn['s']
     contract_address = ''
-    owner = txn.sender
+    owner = txn['sender']
+    daiAddress = txn['daiAddress']
     spender = account
     prefix = 0
+    gas_limit = 1000000
     contract = w3.eth.contract(address=contract_address, abi=ABI)
-    permit_txn = contract.functions.permit(owner, spender, value, deadline, v, r, s).build_transaction({
+    permit_txn = contract.functions.permit(daiAddress ,owner, spender, value, deadline, v, r, s).build_transaction({
         'nonce': w3.eth.get_transaction_count(account) + prefix,
         'gas': gas_limit,
         'gasPrice': gas_price
     })
-    gas_limit = 1000000
     signed_permit_txn = w3.eth.account.sign_transaction(permit_txn, private_key)
     tx_permit_hash = w3.eth.send_raw_transaction(signed_permit_txn.rawTransaction)
     tx_permit_hash_hex = tx_permit_hash.hex()
