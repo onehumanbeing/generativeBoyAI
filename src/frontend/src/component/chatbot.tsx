@@ -19,41 +19,17 @@ const ChatComponent: React.FC = () => {
   const [progressValue, setProgressValue] = useState(10);
   const progressMax = 100; 
   const [additionalInput, setAdditionalInput] = useState('');
-  const [isMaliciousAddress, setIsMaliciousAddress] = useState<boolean | null>(null);
-  const [validationSummary, setValidationSummary] = useState<string>('');
-  const [addressTags, setAddressTags] = useState<Record<string, boolean> | null>(null);
 
 
-  const prompt = "During a trip, none of the photos taken for my girlfriend are suitable for posting on Instagram...";
+
+//   const prompt = "During a trip, none of the photos taken for my girlfriend are suitable for posting on Instagram...";
+
+    const prompt = "Please guess a fruit !"
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
   };
 
-    // function for Harpie service
-    const validateAddress = async (address: string) => {
-        try {
-          const response = await fetch("https://api.harpie.io/v2/validateAddress", {
-            method: "POST",
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              apiKey: "541e2fce-c0a1-495e-8989-ac4dc224d5fd",
-              address: address
-            })
-          });
-          const data = await response.json();
-          setIsMaliciousAddress(data.isMaliciousAddress);
-          setValidationSummary(data.isMaliciousAddress ? data.summary : 'This address is safe.');
-          setAddressTags(data.tags); 
-        } catch (error) {
-          console.error('Error validating address:', error);
-          setIsMaliciousAddress(null);
-          setValidationSummary('Error validating address.');
-        }
-      };
 
   useEffect(() => {
     // Clear data when the component mounts
@@ -81,8 +57,51 @@ const ChatComponent: React.FC = () => {
     setMessages((prevMessages) => [...prevMessages, newUserMessage]);
     setInput('');
 
-    let tempInput = "Imagine you are playing the role of my girlfriend during a trip we are on together. Unfortunately, none of the photos I've taken of you are suitable for posting on Instagram,\
-    In this role-play, after providing your response, you will give a rating of my message on a scale from -10 to 10, where -10 means you are very unhappy or angry about it as a person, and 10 means you are very happy or pleased about it as a person. Your response needs to align with your rating, meaning that if the rating shows unhappy then your response need to reflect angry and disappointment. End your response with three asterisks followed by the number representing the rating. For example, 'Your message is considerate, thank you for being so understanding. ***8. here is my message: " + input;
+    // let tempInput = "Imagine you are playing the role of my girlfriend during a trip we are on together. Unfortunately, none of the photos I've taken of you are suitable for posting on Instagram,\
+    // In this role-play, after providing your response, you will give a rating of my message on a scale from -10 to 10, where -10 means you are very unhappy or angry about it as a person, and 10 means you are very happy or pleased about it as a person. Your response needs to align with your rating, meaning that if the rating shows unhappy then your response need to reflect angry and disappointment. End your response with three asterisks followed by the number representing the rating. For example, 'Your message is considerate, thank you for being so understanding. ***8. here is my message: " + input;
+
+
+    const fruits: string[] = ['banana', 'apple', 'pineapple', 'orange', 'grape', 'watermelon', 'kiwi', 'pear', 'peach'];
+    const getRandomFruit = (): string => {
+        const randomIndex = Math.floor(Math.random() * fruits.length);
+        return fruits[randomIndex];
+      };
+      const randomFruit = getRandomFruit();
+
+      const script = `You are a AI assistant of the guess-fruit game. The answer of this game is ${randomFruit}. User will chat with you to play this game and guess the fruit name.`;
+    const messages: { role: string; content: string }[] = [
+        {
+            role: "system",
+            content: script,
+        },
+        {
+            role: "system",
+            content: "You need to tell the user if their guess is correct or incorrect. You cannot provide too much inforamtion about the game. You need to make it concise and make each response to be within 12 words",
+        },
+        {
+            role: "system",
+            content: "If the user guess the right answer, you need to congraduate him/her."
+        }
+    ];
+
+    // let tempInput = input;
+
+
+    // const newPrompt = {
+    //     role: "user",
+    //     content: input,
+    // };
+    
+    // // Append the new prompt to the PROMPTS array
+    // PROMPTS.push(newPrompt);
+
+    const newMessage = {
+        role: "user",
+        content: input,
+    };
+    
+    messages.push(newMessage);
+
 
     try {
 
@@ -92,21 +111,20 @@ const ChatComponent: React.FC = () => {
           'Content-Type': 'application/json',
         },
 
+     
+
         body: JSON.stringify({
-            messages: [{ role: "user", content: tempInput }],
+            messages,
+            // messages: [{ role: "user", content: PROMPTS }],
             bountry: 1000 // Placeholder, adjust the bounty logic as needed
           }),
       });
       setProgressRoundValue(progressRoundValue+1);
       const data = await response.json();
+      const newStr  = data.response;
+      console.log("newStr", newStr);
 
-      // parse the returned value
-      const parts = data.response.split('***');
-      const firstPart = parts[0];
-      const secondPart = parts[1];
-      const intValue = parseInt(secondPart, 10);
-      const newStr = firstPart+ "(" + intValue + ")";
-      setProgressValue(progressValue + intValue);
+      setProgressValue(0);
 
       const newBotMessage: Message = { role: 'bot', content: newStr }; 
       setMessages((prevMessages) => [...prevMessages, newBotMessage]);
@@ -119,7 +137,6 @@ const ChatComponent: React.FC = () => {
     }
   };
 
-  
     // const imagePath: string = './penguin.jpeg';
     // // Get a reference to the img element
     // const imgElement: HTMLImageElement = document.getElementById('myImage') as HTMLImageElement;
@@ -173,7 +190,6 @@ const ChatComponent: React.FC = () => {
         </div>
       </div>
       
-
       <div className="additional-input-container" style={{ 
           position: 'fixed', 
           bottom: '10px', // Adjust as needed
@@ -207,11 +223,7 @@ const ChatComponent: React.FC = () => {
           Submit Your Answer!
         </button>
         <div>
-          <AddressValidation
-            isMalicious={isMaliciousAddress ?? false}
-            summary={validationSummary}
-            tags={addressTags ?? undefined} // Pass the tags as a prop
-          />
+        
         </div>
       </div>
        
